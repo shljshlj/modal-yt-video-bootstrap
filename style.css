@@ -1,0 +1,248 @@
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  list-style-type: none;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f3f3f3;
+  padding-top: 30px;
+  font-family: Ariel, sans-serif;
+}
+
+/* Video list preview */
+
+.panel {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 50px 80px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.panel:not(:last-of-type) {
+  margin-bottom: 50px;
+}
+
+.panel__heading {
+  text-transform: uppercase;
+  font-size: 1.3em;
+  margin: 10px 0 20px;
+  letter-spacing: 0.2em;
+}
+
+.video__list {
+  display: flex;
+  overflow-x: auto;
+}
+
+.video__item {
+  flex: 1 0 33%;
+  min-width: 300px;
+  height: 200px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.video__item:last-of-type {
+  margin-right: 0;
+}
+
+.video__preview {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.video__play {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  cursor: pointer;
+}
+
+.video__play-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.video__play-background:hover .video__play-icon {
+  opacity: 0.6;
+}
+
+.video__play-icon {
+  transition: opacity 200ms linear;
+}
+
+/* Modal */
+
+.page__overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 100;
+  animation-duration: .5s;
+  will-change: opacity;
+  user-select: none;
+}
+
+.modal__overlay {
+  visibility: visible;
+  z-index: 1000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  will-change: opacity;
+  animation-duration: .5s;
+}
+
+.modal__content {
+  position: absolute;
+  background-color: #000;
+  color: #fff;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  opacity: 0;
+  user-select: text;
+  will-change: top, left, transform, opacity;
+  animation-duration: .5s;
+}
+
+.modal__titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.modal__title {
+  font-size: 1.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  cursor: default;
+}
+
+.modal__close {
+  margin-right: -7px;
+}
+
+.modal__close-button {
+  padding: 16px 14px;
+  margin-left: 8px;
+}
+
+/* Transitioning modal view */
+
+body.show-modal > *:not(.modal__overlay) {
+  filter: grayscale(100%);
+}
+
+body.show-modal .page__overlay {
+  display: block;
+  opacity: 1;
+  animation-name: fadeIn;
+}
+
+body.show-modal .modal__overlay {
+  display: flex;
+  opacity: 1;
+  animation-name: fadeIn;
+}
+
+body.show-modal .modal__content {
+  display: block;
+  opacity: 1;
+  animation-name: scaleIn;
+}
+
+body.hide-modal .page__overlay {
+  display: block;
+  animation-name: fadeOut;
+}
+
+body.hide-modal .modal__overlay {
+  display: flex;
+  opacity: 0;
+  animation-name: fadeOut;
+}
+
+body.hide-modal .modal__content {
+  display: block;
+  opacity: 0;
+  animation-name: scaleOut;
+}
+
+/* Animations */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
