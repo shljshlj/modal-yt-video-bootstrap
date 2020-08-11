@@ -92,6 +92,7 @@ function setupModalListeners() {
   $modalCloseBtn.addEventListener('click', closeModal);
   $modalOverlay.addEventListener('click', clickOutsideToCloseModal);
   $modalOverlay.addEventListener('animationend', removeModalOnAnimationend);
+  $modalContent.addEventListener('animationend', showHidePlayer);
 }
 
 
@@ -101,6 +102,7 @@ function removeModalListeners() {
   $modalCloseBtn.removeEventListener('click', closeModal);
   $modalOverlay.removeEventListener('click', clickOutsideToCloseModal);
   $modalOverlay.removeEventListener('animationend', removeModalOnAnimationend);
+  $modalContent.removeEventListener('animationend', showHidePlayer);
 }
 
 
@@ -125,6 +127,10 @@ function removeModalOnAnimationend(event) {
   }
 }
 
+function showHidePlayer(event) {
+  if (event.animationName === 'scaleIn') showPlayer();
+  if (event.animationName === 'scaleOut') hidePlayer();
+}
 
 /* Modal style functions  */
 
@@ -136,6 +142,14 @@ function hideModal() {
   $modalIframePlayer.src = '';
   $bodyEl.classList.remove('show-modal');
   $bodyEl.classList.add('hide-modal');
+}
+
+function showPlayer() {
+  $modalIframePlayer.classList.add('show');
+}
+
+function hidePlayer() {
+  $modalIframePlayer.classList.remove('show');
 }
 
 
