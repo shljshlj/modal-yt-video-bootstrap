@@ -17,7 +17,22 @@
   </section>
 
   <div class="page__overlay"></div>
-  <div class="modal__overlay"></div>
+  <div class="modal__overlay">
+    <div class="modal__content">
+      <div class="modal__titlebar">
+        <span class="modal__title"></span>
+        <div class="modal__close">
+          <a role="button" class="modal__close-button" href="#">
+            <span class="modal__close-icon">
+              <i class="fas fa-times"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+      <iframe id="modal-player" class="modal__player" type="text/html" width="960" height="547" src="" frameborder="0"
+        allow="autoplay" allowfullscreen></iframe>
+    </div>
+  </div>
 
   <script type="module">
     import { initVideosSection } from './app.js';

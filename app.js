@@ -30,50 +30,37 @@ const videoItem = (videoKey, videoTitle) => {
   `;
 }
 
-const modalContent = (videoTitle, videoKey) => {
-  return `
-    <div class="modal__content">
-      <div class="modal__titlebar">
-        <span class="modal__title">${videoTitle}</span>
-        <div class="modal__close">
-          <a role="button" class="modal__close-button" href="#">
-            <span class="modal__close-icon">
-              <i class="fas fa-times"></i>
-            </span>
-          </a>
-        </div>
-      </div>
-        <iframe type="text/html" width="960" height="547" src="https://www.youtube.com/embed/${videoKey}?enablejsapi=1" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-    </div>
-  `;
-}
-
 const $bodyEl = document.querySelector('body');
 const $videoListContainer = document.querySelector('.video__list');
+
 const $modalOverlay = document.querySelector('.modal__overlay');
+const $modalContent = document.querySelector('.modal__content');
+const $modalTitle = document.querySelector('.modal__title');
+const $modalIframePlayer = document.querySelector('#modal-player');
+const $modalCloseBtn = document.querySelector('.modal__close-button');
 
 function initVideosSection() {
-  createVideoList($videoListContainer, $modalOverlay);
+  createVideoList();
 }
 
 
 /* Create and show video items */
 
-function createVideoList(videoListContainer, modalOverlay) {
+function createVideoList() {
   const videoList = videos.map(({ ytKey, title }) => {
     return videoItem(ytKey, title);
   }).join('\n');
 
-  videoListContainer.insertAdjacentHTML('beforeend', videoList);
+  $videoListContainer.insertAdjacentHTML('beforeend', videoList);
 
-  setupVideoListeners(videoListContainer, modalOverlay);
+  setupVideoListeners();
 }
 
 
 /* Setup click listeners for opening modal */
 
-function setupVideoListeners(parentVideoEl, parentModalEl) {
-  parentVideoEl.addEventListener('click', function (event) {
+function setupVideoListeners() {
+  $videoListContainer.addEventListener('click', function (event) {
     event.preventDefault();
 
     if (!event.target.closest('.video__play')) return;
@@ -82,40 +69,36 @@ function setupVideoListeners(parentVideoEl, parentModalEl) {
     const videoKey = elem.getAttribute('data-key');
     const videoTitle = elem.getAttribute('data-title');
 
-    createModal(parentModalEl, videoTitle, videoKey);
+    createModal(videoTitle, videoKey);
   });
 }
 
 
 /* Create and show modal */
 
-function createModal(modalOverlay, videoTitle, videoKey) {
-  const modal = modalContent(videoTitle, videoKey);
-  modalOverlay.insertAdjacentHTML('beforeend', modal);
+function createModal(videoTitle, videoKey) {
+  const videoSrc = `https://www.youtube.com/embed/${videoKey}?autoplay=1`;
+  $modalTitle.textContent = videoTitle;
+  $modalIframePlayer.src = videoSrc;
 
   showModal();
-  playVideo();
-  setupModalListeners(modalOverlay);
+  setupModalListeners();
 }
 
 
 /* Setup event listeners for closing modal */
 
-function setupModalListeners(modalOverlay) {
-  const $closeBtn = document.querySelector('.modal__close-button');
-
-  $closeBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', clickOutsideToCloseModal);
-  modalOverlay.addEventListener('animationend', removeModalOnAnimationend);
+function setupModalListeners() {
+  $modalCloseBtn.addEventListener('click', closeModal);
+  $modalOverlay.addEventListener('click', clickOutsideToCloseModal);
+  $modalOverlay.addEventListener('animationend', removeModalOnAnimationend);
 }
 
 
 /* Remove event listeners from modal */
 
 function removeModalListeners() {
-  const $closeBtn = document.querySelector('.modal__close-button');
-
-  $closeBtn.removeEventListener('click', closeModal);
+  $modalCloseBtn.removeEventListener('click', closeModal);
   $modalOverlay.removeEventListener('click', clickOutsideToCloseModal);
   $modalOverlay.removeEventListener('animationend', removeModalOnAnimationend);
 }
@@ -125,25 +108,20 @@ function removeModalListeners() {
 
 function closeModal(event) {
   event.preventDefault();
-  pauseVideo();
   hideModal();
 }
 
 function clickOutsideToCloseModal(event) {
   event.preventDefault();
   if (event.target === event.currentTarget) {
-    pauseVideo();
     hideModal();
   }
 }
 
 function removeModalOnAnimationend(event) {
   if (event.animationName === 'fadeOut') {
-    const $modalBox = document.querySelector('.modal__content');
-
     $bodyEl.classList.remove('hide-modal');
     removeModalListeners();
-    this.removeChild($modalBox);
   }
 }
 
@@ -155,29 +133,9 @@ function showModal() {
 }
 
 function hideModal() {
+  $modalIframePlayer.src = '';
   $bodyEl.classList.remove('show-modal');
   $bodyEl.classList.add('hide-modal');
-}
-
-
-/* Youtube api functions  */
-
-function playVideo() {
-  const $iframe = document.querySelector('iframe');
-  $iframe.contentWindow.postMessage(JSON.stringify({
-    "event": "command",
-    "func": "playVideo",
-    "args": ""
-  }), "*");
-}
-
-function pauseVideo() {
-  const $iframe = document.querySelector('iframe');
-  $iframe.contentWindow.postMessage(JSON.stringify({
-    "event": "command",
-    "func": "pauseVideo",
-    "args": ""
-  }), "*");
 }
 
 

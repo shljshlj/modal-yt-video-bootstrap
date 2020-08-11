@@ -160,6 +160,14 @@ body {
   margin-left: 8px;
 }
 
+/* .modal__player {
+  display: none;
+}
+
+.modal__player.show {
+  display: block;
+} */
+
 /* Transitioning modal view */
 
 body.show-modal > *:not(.modal__overlay) {
