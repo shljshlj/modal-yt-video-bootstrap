@@ -163,7 +163,7 @@ function hideModal() {
 /* Youtube api functions  */
 
 function playVideo() {
-  const $iframe = document.querySelector('.embedded iframe');
+  const $iframe = document.querySelector('.iframe');
   $iframe.contentWindow.postMessage(JSON.stringify({
     "event": "command",
     "func": "playVideo",
@@ -172,7 +172,7 @@ function playVideo() {
 }
 
 function pauseVideo() {
-  const $iframe = document.querySelector('.embedded iframe');
+  const $iframe = document.querySelector('.iframe');
   $iframe.contentWindow.postMessage(JSON.stringify({
     "event": "command",
     "func": "pauseVideo",
