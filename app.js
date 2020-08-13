@@ -33,11 +33,11 @@ const videoItem = (videoKey, videoTitle) => {
 const $bodyEl = document.querySelector('body');
 const $videoListContainer = document.querySelector('.video__list');
 
-const $modalOverlay = document.querySelector('.modal__overlay');
-const $modalContent = document.querySelector('.modal__content');
-const $modalTitle = document.querySelector('.modal__title');
-const $modalIframePlayer = document.querySelector('#modal-player');
-const $modalCloseBtn = document.querySelector('.modal__close-button');
+// const $modalOverlay = document.querySelector('.modal__overlay');
+// const $modalContent = document.querySelector('.modal__content');
+// const $modalTitle = document.querySelector('.modal__title');
+// const $modalIframePlayer = document.querySelector('#modal-player');
+// const $modalCloseBtn = document.querySelector('.modal__close-button');
 
 function initVideosSection() {
   createVideoList();
@@ -72,6 +72,17 @@ function setupVideoListeners() {
     createModal(videoTitle, videoKey);
   });
 }
+
+
+
+const myModal = new bootstrap.Modal(document.getElementById('modal-yt'), options);
+
+
+
+
+
+
+
 
 
 /* Create and show modal */

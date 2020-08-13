@@ -93,7 +93,7 @@ body {
 
 /* Modal */
 
-.page__overlay {
+/* .page__overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -104,7 +104,6 @@ body {
   opacity: 0;
   z-index: 100;
   animation-duration: .5s;
-  /* will-change: opacity; */
   user-select: none;
 }
 
@@ -120,7 +119,6 @@ body {
   justify-content: center;
   align-items: center;
   opacity: 0;
-  /* will-change: opacity; */
   animation-duration: .5s;
 }
 
@@ -133,7 +131,6 @@ body {
   border-top-right-radius: 4px;
   opacity: 0;
   user-select: text;
-  /* will-change: top, left, transform, opacity; */
   animation-duration: .5s;
 }
 
@@ -181,11 +178,11 @@ body {
 
 .modal__player.show {
   display: block;
-}
+} */
 
 /* Transitioning modal view */
 
-body.show-modal > *:not(.modal__overlay) {
+/* body.show-modal > *:not(.modal__overlay) {
   filter: grayscale(100%);
 }
 
@@ -222,7 +219,7 @@ body.hide-modal .modal__content {
   display: block;
   opacity: 0;
   animation-name: scaleOut;
-}
+} */
 
 /* Animations */
 
