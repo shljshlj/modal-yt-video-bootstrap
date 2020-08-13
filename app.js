@@ -13,12 +13,20 @@ const videos = [
   }
 ];
 
-const videoItem = (videoKey, videoTitle) => {
-  const backgroundImg = `https://i.ytimg.com/vi/${videoKey}/hqdefault.jpg`;
+const videoItem = (videoId, videoTitle) => {
+  const backgroundImg = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
   return `
       <li class="video__item">
         <div class="video__preview" style="background-image: url('${backgroundImg}')">
-          <a class="video__play" href="#" data-site="YouTube" data-key="${videoKey}" data-title="${videoTitle}">
+          <a 
+            class="video__play"
+            href="#"
+            data-site="YouTube"
+            data-video-id="${videoId}"
+            data-title="${videoTitle}"
+            data-toggle="modal"
+            data-target="#modal-yt"
+          >
             <div class="video__play-background">
               <span class="video__play-icon">
                 <i class="fas fa-play"></i>
@@ -33,11 +41,8 @@ const videoItem = (videoKey, videoTitle) => {
 const $bodyEl = document.querySelector('body');
 const $videoListContainer = document.querySelector('.video__list');
 
-// const $modalOverlay = document.querySelector('.modal__overlay');
-// const $modalContent = document.querySelector('.modal__content');
-// const $modalTitle = document.querySelector('.modal__title');
-// const $modalIframePlayer = document.querySelector('#modal-player');
-// const $modalCloseBtn = document.querySelector('.modal__close-button');
+const $modalIframePlayer = document.querySelector('#modal-player');
+const $modalTitle = document.querySelector('.modal-title');
 
 function initVideosSection() {
   createVideoList();
@@ -66,101 +71,28 @@ function setupVideoListeners() {
     if (!event.target.closest('.video__play')) return;
 
     const elem = event.target.closest('.video__play');
-    const videoKey = elem.getAttribute('data-key');
+    const videoId = elem.getAttribute('data-video-id');
     const videoTitle = elem.getAttribute('data-title');
 
-    createModal(videoTitle, videoKey);
+
+
+    createModal(videoTitle, videoId);
   });
 }
 
 
+/* Create and display modal */
 
-const myModal = new bootstrap.Modal(document.getElementById('modal-yt'), options);
+function createModal(videoTitle, videoId) {
+  $('#modal-yt').on('shown.bs.modal', function () {
+    const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    $modalTitle.textContent = videoTitle;
+    $modalIframePlayer.src = videoSrc;
+  })
 
-
-
-
-
-
-
-
-
-/* Create and show modal */
-
-function createModal(videoTitle, videoKey) {
-  const videoSrc = `https://www.youtube.com/embed/${videoKey}?autoplay=1`;
-  $modalTitle.textContent = videoTitle;
-  $modalIframePlayer.src = videoSrc;
-
-  showModal();
-  setupModalListeners();
-}
-
-
-/* Setup event listeners for closing modal */
-
-function setupModalListeners() {
-  $modalCloseBtn.addEventListener('click', closeModal);
-  $modalOverlay.addEventListener('click', clickOutsideToCloseModal);
-  $modalOverlay.addEventListener('animationend', removeModalOnAnimationend);
-  $modalContent.addEventListener('animationend', showHidePlayer);
-}
-
-
-/* Remove event listeners from modal */
-
-function removeModalListeners() {
-  $modalCloseBtn.removeEventListener('click', closeModal);
-  $modalOverlay.removeEventListener('click', clickOutsideToCloseModal);
-  $modalOverlay.removeEventListener('animationend', removeModalOnAnimationend);
-  $modalContent.removeEventListener('animationend', showHidePlayer);
-}
-
-
-/* Modal event handlers */
-
-function closeModal(event) {
-  event.preventDefault();
-  hideModal();
-}
-
-function clickOutsideToCloseModal(event) {
-  event.preventDefault();
-  if (event.target === event.currentTarget) {
-    hideModal();
-  }
-}
-
-function removeModalOnAnimationend(event) {
-  if (event.animationName === 'fadeOut') {
-    $bodyEl.classList.remove('hide-modal');
-    removeModalListeners();
-  }
-}
-
-function showHidePlayer(event) {
-  if (event.animationName === 'scaleIn') showPlayer();
-  if (event.animationName === 'scaleOut') hidePlayer();
-}
-
-/* Modal style functions  */
-
-function showModal() {
-  $bodyEl.classList.add('show-modal');
-}
-
-function hideModal() {
-  $modalIframePlayer.src = '';
-  $bodyEl.classList.remove('show-modal');
-  $bodyEl.classList.add('hide-modal');
-}
-
-function showPlayer() {
-  $modalIframePlayer.classList.add('show');
-}
-
-function hidePlayer() {
-  $modalIframePlayer.classList.remove('show');
+  $('#modal-yt').on('hidden.bs.modal', function (e) {
+    $modalIframePlayer.src = '';
+  })
 }
 
 
